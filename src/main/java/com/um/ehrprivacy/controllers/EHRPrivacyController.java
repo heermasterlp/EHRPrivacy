@@ -17,8 +17,9 @@ public class EHRPrivacyController {
 	/* Query the records based on the conditions */
 	@RequestMapping(value = "queryrecord", method = RequestMethod.POST)
 	public String handleQuery( HttpServletRequest request, Model model){
-		
+			
 		List<PatientRecord> result = generateRecords();
+		System.out.println("Get the request !");
 		model.addAttribute("ehealthrecrods", result);
 		return "success";
 	}

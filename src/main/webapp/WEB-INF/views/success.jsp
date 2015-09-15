@@ -7,10 +7,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/bootstrap-table.css">
 	<link href="css/query.css" rel="stylesheet" />
 	<script type="text/javascript" src = "js/jquery-1.11.3.min.js" ></script>
 	<script type="text/javascript">
-		function btnQueryClicked() {
+		/* function btnQueryClicked() {
 			
 			patientid = $('#patientid').val();
 			querydate = $('#querydate').val();
@@ -25,7 +26,7 @@
 					
 				}
 			});
-		}
+		} */
 	
 	</script>
 
@@ -48,19 +49,15 @@
 					<input id="querydate" name="querydate" placeholder="Date" required autofocus/>
 					Hospital ID.
 					<input id="hospitalid" name="hospitalid" placeholder="Hospital ID" autofocus/>
-					Patient Authorization Code.
-					<input id="authorizationcode" type="password" name="authorizationcode" placeholder="Authorization Code" required autofocus/>
+					<!-- Patient Authorization Code.
+					<input id="authorizationcode" type="password" name="authorizationcode" placeholder="Authorization Code" required autofocus/> -->
 					<!-- <input type="button" value="Query" onClick="btnQueryClicked()" /> -->
 					<input type="submit" value="Query" />
 				</div>
 			</form>
 		</div>
 		<!-- Query Results -->
-		<div id="results">
-			
-		</div>
-		<div>
-			<table>
+			<table class="table table-striped">
 				<tr>
 	                <th>编号</th>
 	                <th>信息</th>
@@ -75,6 +72,5 @@
             	</c:forEach>
 			</table>
 		</div>
-	</div>
 </body>
 </html>
