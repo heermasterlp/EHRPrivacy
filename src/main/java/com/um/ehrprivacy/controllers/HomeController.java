@@ -1,4 +1,4 @@
-package com.um.ehrprivacy;
+package com.um.ehrprivacy.controllers;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 /**
  * Handles requests for the application home page.
@@ -38,10 +37,20 @@ public class HomeController {
 	}
 	
 	/* Handle the login  */
-	@RequestMapping(value="login", method = RequestMethod.GET)
+	@RequestMapping(value="login", method = RequestMethod.POST)
 	public String handleLogin(String username, String password, Model model){
-		model.addAttribute("username", username);
-		return "success";
+		
+		if(username.equals("admin") && password.equals("123")){
+			model.addAttribute("username", username);
+			return "success";
+		}else {
+			return "home";
+		}
 	}
 	
+	/* Logout */
+	@RequestMapping(value="logout", method = RequestMethod.GET)
+	public String handleLogout(Model model) {
+		return "home";
+	}
 }
