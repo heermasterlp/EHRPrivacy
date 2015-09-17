@@ -1,10 +1,16 @@
 package com.um.ehrprivacy.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import com.um.ehrprivacy.model.PatientRecord;
 
+import com.google.gson.Gson;
+import com.um.ehrprivacy.model.PatientRecord;
+import com.um.ehrprivacy.utils.HandlePatientRecordOperation;
+
+import javax.print.DocFlavor.STRING;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +22,30 @@ public class EHRPrivacyController {
 	
 	/* Query the records based on the conditions */
 	@RequestMapping(value = "queryrecord", method = RequestMethod.POST)
-	public String handleQuery( HttpServletRequest request, Model model){
+	public String handleQuery( HttpServletRequest request, Model model, HttpSession session){
 			
 		List<PatientRecord> result = generateRecords();
 		System.out.println("Get the request !");
+		System.out.println("userid:" + session.getAttribute("userId"));
+		
+		
+		// 1. Get the query conditions: patient id , date, hospital id
+		String patientid = request.getParameter("patientid");
+		String userid = (String) session.getAttribute("userId"); // userid privacy method
+		
+		// 2. Search patient node information in the Patient Index collections.
+		List<HashMap<String, String>> patientNodeInfos = HandlePatientRecordOperation.getPatientNodeInfoList(patientid);
+		
+		// 3. Request the patient records to the nodes got from the Patient Index collections.
+		result = HandlePatientRecordOperation.getPatientRecords(null, patientid, userid);
+		
+		// 4. Do the whole query operations in all nodes.
+		// 5. Format the query results and return.
+		
 		model.addAttribute("ehealthrecrods", result);
 		return "success";
 	}
+	
 	
 	/**
 	 *  Generate the patient record data
@@ -59,6 +82,7 @@ public class EHRPrivacyController {
 		}
 		String jsonString = "";
 		
+		jsonString = new Gson().toJson(list);
 		
 		return jsonString;
 	}
