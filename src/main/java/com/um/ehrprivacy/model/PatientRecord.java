@@ -19,6 +19,8 @@ public class PatientRecord {
 	private String diagnose;
 	
 	private String doctor;
+	
+	private String privacy; // Control the privacy of patient record
 
 	public String getRecordID() {
 		return recordID;
