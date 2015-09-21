@@ -8,68 +8,56 @@ package com.um.ehrprivacy.model;
  */
 public class PatientRecord {
 	
-	private String recordID;
+	private String HospitalID;
+	private String IDCardNO;
+	private String Date;
 	
-	private String hospitalID;
+	private HemodialysisChartRecordSet hemodialysisChartRecordSet;
+	private HemodialysisRecordSet hemodialysisRecordSet;
 	
-	private PatientInfo patientInfo;
-	
-	private String examination;
-	
-	private String diagnose;
-	
-	private String doctor;
-	
-	private String privacy; // Control the privacy of patient record
-
-	public String getRecordID() {
-		return recordID;
-	}
-
-	public void setRecordID(String recordID) {
-		this.recordID = recordID;
-	}
-
+	private HBVaccineInjectionRecordSet hbVaccineInjectionRecordSet;
+	private LaboratoryReportRecordSet laboratoryReportRecordSet;
 	public String getHospitalID() {
-		return hospitalID;
+		return HospitalID;
 	}
-
 	public void setHospitalID(String hospitalID) {
-		this.hospitalID = hospitalID;
+		HospitalID = hospitalID;
 	}
-
-	public PatientInfo getPatientInfo() {
-		return patientInfo;
+	public String getIDCardNO() {
+		return IDCardNO;
 	}
-
-	public void setPatientInfo(PatientInfo patientInfo) {
-		this.patientInfo = patientInfo;
+	public void setIDCardNO(String iDCardNO) {
+		IDCardNO = iDCardNO;
 	}
-
-	public String getExamination() {
-		return examination;
+	public String getDate() {
+		return Date;
 	}
-
-	public void setExamination(String examination) {
-		this.examination = examination;
+	public void setDate(String date) {
+		Date = date;
 	}
-
-	public String getDiagnose() {
-		return diagnose;
+	public HemodialysisChartRecordSet getHemodialysisChartRecordSet() {
+		return hemodialysisChartRecordSet;
 	}
-
-	public void setDiagnose(String diagnose) {
-		this.diagnose = diagnose;
+	public void setHemodialysisChartRecordSet(HemodialysisChartRecordSet hemodialysisChartRecordSet) {
+		this.hemodialysisChartRecordSet = hemodialysisChartRecordSet;
 	}
-
-	public String getDoctor() {
-		return doctor;
+	public HemodialysisRecordSet getHemodialysisRecordSet() {
+		return hemodialysisRecordSet;
 	}
-
-	public void setDoctor(String doctor) {
-		this.doctor = doctor;
+	public void setHemodialysisRecordSet(HemodialysisRecordSet hemodialysisRecordSet) {
+		this.hemodialysisRecordSet = hemodialysisRecordSet;
 	}
-	
-	
+	public HBVaccineInjectionRecordSet getHbVaccineInjectionRecordSet() {
+		return hbVaccineInjectionRecordSet;
+	}
+	public void setHbVaccineInjectionRecordSet(HBVaccineInjectionRecordSet hbVaccineInjectionRecordSet) {
+		this.hbVaccineInjectionRecordSet = hbVaccineInjectionRecordSet;
+	}
+	public LaboratoryReportRecordSet getLaboratoryReportRecordSet() {
+		return laboratoryReportRecordSet;
+	}
+	public void setLaboratoryReportRecordSet(LaboratoryReportRecordSet laboratoryReportRecordSet) {
+		this.laboratoryReportRecordSet = laboratoryReportRecordSet;
+	}
 	
 }

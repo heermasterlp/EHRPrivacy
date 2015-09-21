@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.print.Doc;
+
 import org.bson.Document;
 
 import com.mongodb.Block;
@@ -11,6 +13,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.um.ehrprivacy.model.HBVaccineInjectionRecordSet;
+import com.um.ehrprivacy.model.HemodialysisChartRecordSet;
+import com.um.ehrprivacy.model.HemodialysisRecordSet;
+import com.um.ehrprivacy.model.LaboratoryReportRecordSet;
 import com.um.ehrprivacy.model.PatientInfo;
 import com.um.ehrprivacy.model.PatientRecord;
 
@@ -157,6 +163,105 @@ public class HandlePatientRecordOperation {
 		PatientRecord patientRecord = new PatientRecord();
 		
 		//Set attributes
+		
+		Document record = (Document) document.get("patientRecord");
+		if(record == null){
+			return patientRecord;
+		}
+		
+		String HospitalID = record.getString("HospitalID");
+		String IDCardNO = record.getString("IDCardNO");
+		String Date = record.getString("Date");
+		
+		patientRecord.setHospitalID(HospitalID);
+		patientRecord.setIDCardNO(IDCardNO);
+		patientRecord.setDate(Date);
+		
+		HemodialysisChartRecordSet hemodialysisChartRecordSet = new HemodialysisChartRecordSet();
+		Document hcrDocument = (Document) record.get("HemodialysisChartRecordSet");
+		
+		hemodialysisChartRecordSet.setBloodFlow(hcrDocument.getString("BloodFlow"));
+		hemodialysisChartRecordSet.setDiastolicPressure(hcrDocument.getString("DiastolicPressure"));
+		hemodialysisChartRecordSet.setNa(hcrDocument.getString("Na"));
+		hemodialysisChartRecordSet.setPulse(hcrDocument.getString("Pulse"));
+		hemodialysisChartRecordSet.setSystolicPressure(hcrDocument.getString("SystolicPressure"));
+		hemodialysisChartRecordSet.setTemp(hcrDocument.getString("Temp"));
+		hemodialysisChartRecordSet.setTime(hcrDocument.getString("Time"));
+		hemodialysisChartRecordSet.setTMP(hcrDocument.getString("TMP"));
+		hemodialysisChartRecordSet.setUF(hcrDocument.getString("UF"));
+		hemodialysisChartRecordSet.setVen(hcrDocument.getString("Ven"));
+		patientRecord.setHemodialysisChartRecordSet(hemodialysisChartRecordSet);
+		
+		HemodialysisRecordSet hRecordSet = new HemodialysisRecordSet();
+		Document hrsDocument = (Document) record.get("HemodialysisRecordSet");
+		hRecordSet.setAntiCoagulation(hrsDocument.getString("AntiCoagulation"));
+		hRecordSet.setAntiCoDosage(hrsDocument.getString("AntiCoDosage"));
+		hRecordSet.setArhythmia(hrsDocument.getString("Arhythmia"));
+		hRecordSet.setBloodAccess(hrsDocument.getString("BloodAccess"));
+		hRecordSet.setCheckNurse(hrsDocument.getString("CheckNurse"));
+		hRecordSet.setCloseNurse(hrsDocument.getString("CloseNurse"));
+		hRecordSet.setComments(hrsDocument.getString("Comments"));
+		hRecordSet.setCramp(hrsDocument.getString("Cramp"));
+		hRecordSet.setD3ZemplarDosage(hrsDocument.getString("D3ZemplarDosage"));
+		hRecordSet.setDarbepoetinDosage(hrsDocument.getString("DarbepoetinDosage"));
+		hRecordSet.setDate(hrsDocument.getString("Date"));
+		hRecordSet.setDialysisBlockage(hrsDocument.getString("DialysisBlockage"));
+		hRecordSet.setDialyzer(hrsDocument.getString("Dialyzer"));
+		hRecordSet.setDoctor(hrsDocument.getString("Doctor"));
+		hRecordSet.setDryWeight(hrsDocument.getString("DryWeight"));
+		hRecordSet.setDurationH(hrsDocument.getString("DurationH"));
+		hRecordSet.setDurationM(hrsDocument.getString("DurationM"));
+		hRecordSet.setGlucoseDosage(hrsDocument.getString("GlucoseDosage"));
+		hRecordSet.setHypertension(hrsDocument.getString("Hypertension"));
+		hRecordSet.setHypotension(hrsDocument.getString("Hypotension"));
+		hRecordSet.setKCI(hrsDocument.getString("KCI"));
+		hRecordSet.setMachine(hrsDocument.getString("Machine"));
+		hRecordSet.setNetLoss(hrsDocument.getString("NetLoss"));
+		hRecordSet.setNSDosage(hrsDocument.getString("NSDosage"));
+		hRecordSet.setNSFlushVolume(hrsDocument.getString("NSFlushVolume"));
+		hRecordSet.setProgramme(hrsDocument.getString("Programme"));
+		hRecordSet.setRecommonDosage(hrsDocument.getString("RecommonDosage"));
+		hRecordSet.setStartNurse(hrsDocument.getString("StartNurse"));
+		hRecordSet.setTargetLoss(hrsDocument.getString("TargetLoss"));
+		hRecordSet.setTimes(hrsDocument.getString("Times"));
+		hRecordSet.setVenoferDosage(hrsDocument.getString("VenoferDosage"));
+		hRecordSet.setVomiting(hrsDocument.getString("Vomiting"));
+		hRecordSet.setWeightPostD(hrsDocument.getString("WeightPostD"));
+		hRecordSet.setWeightPreD(hrsDocument.getString("WeightPreD"));
+		hRecordSet.setWithdrawalNurse(hrsDocument.getString("WithdrawalNurse"));
+		patientRecord.setHemodialysisRecordSet(hRecordSet);
+		
+		HBVaccineInjectionRecordSet hbVaccineInjectionRecordSet = new HBVaccineInjectionRecordSet();
+		Document hbvDocument = (Document) record.get("HBVaccineInjectionRecordSet");
+		
+		hbVaccineInjectionRecordSet.setDateMonth0(hbvDocument.getString("DateMonth0"));
+		hbVaccineInjectionRecordSet.setDateMonth1(hbvDocument.getString("DateMonth1"));
+		hbVaccineInjectionRecordSet.setDateMonth2(hbvDocument.getString("DateMonth2"));
+		hbVaccineInjectionRecordSet.setDateMonth3(hbvDocument.getString("DateMonth3"));
+		hbVaccineInjectionRecordSet.setDateMonth4(hbvDocument.getString("DateMonth4"));
+		hbVaccineInjectionRecordSet.setDateMonth5(hbvDocument.getString("DateMonth5"));
+		hbVaccineInjectionRecordSet.setDateMonth6(hbvDocument.getString("DateMonth6"));
+		hbVaccineInjectionRecordSet.setDateMonth7(hbvDocument.getString("DateMonth7"));
+		hbVaccineInjectionRecordSet.setDateMonth8(hbvDocument.getString("DateMonth8"));
+		hbVaccineInjectionRecordSet.setDateMonth9(hbvDocument.getString("DateMonth9"));
+		hbVaccineInjectionRecordSet.setDateMonth10(hbvDocument.getString("DateMonth10"));
+		
+		patientRecord.setHbVaccineInjectionRecordSet(hbVaccineInjectionRecordSet);
+		
+		
+		
+		LaboratoryReportRecordSet laboratoryReportRecordSet = new LaboratoryReportRecordSet();
+		Document lbrDocument = (Document) record.get("LaboratoryReportRecordSet");
+		laboratoryReportRecordSet.setAntiHBe(lbrDocument.getString("AntiHBe"));
+		laboratoryReportRecordSet.setAntiHBs(lbrDocument.getString("AntiHBs"));
+		laboratoryReportRecordSet.setAntiHCV(lbrDocument.getString("AntiHCV"));
+		laboratoryReportRecordSet.setHB(lbrDocument.getString("HB"));
+		laboratoryReportRecordSet.setHBeAg(lbrDocument.getString("HBeAg"));
+		laboratoryReportRecordSet.setVDRL(lbrDocument.getString("VDRL"));
+		
+		
+		patientRecord.setLaboratoryReportRecordSet(laboratoryReportRecordSet);
+		
 		
 		
 		return patientRecord;

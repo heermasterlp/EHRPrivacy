@@ -73,7 +73,7 @@
             	<c:forEach var="erecord" items="${ehealthrecrods }" varStatus="status">
             		<tr>
 	            		<td>${status.index+1 }</td>
-	            		<td>挂号号： ${erecord.getRecordID() }</td>
+	            		<td>挂号号： ${erecord.getIDCardNO() } : ${erecord.getHospitalID()}　: ${erecord.getDate()}</td>
 	            		<td><a href="">详细信息</a></td>
             	 	</tr>
             	</c:forEach>
