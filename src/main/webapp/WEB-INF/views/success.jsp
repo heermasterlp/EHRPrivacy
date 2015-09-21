@@ -46,9 +46,16 @@
 					Patient ID. 
 					<input id="patientid" name="patientid" placeholder="Patient ID" required autofocus>
 					Date.
-					<input id="querydate" name="querydate" placeholder="Date" required autofocus/>
+					<input id="querydate" name="querystartdate" type="date" required autofocus/>
+					-
+					<input id="querydate" name="queryenddate" type="date" required autofocus/>
 					Hospital ID.
-					<input id="hospitalid" name="hospitalid" placeholder="Hospital ID" autofocus/>
+					<!-- <input id="hospitalid" name="hospitalid" placeholder="Hospital ID" autofocus/> -->
+					<select class="select" name="hospitalid" >
+					  <option value="kw">HW Hospital</option>
+					  <option value="gov">GOW Hospital</option>
+					  <option value="uh">University Hospital</option>
+					</select>
 					<!-- Patient Authorization Code.
 					<input id="authorizationcode" type="password" name="authorizationcode" placeholder="Authorization Code" required autofocus/> -->
 					<!-- <input type="button" value="Query" onClick="btnQueryClicked()" /> -->
@@ -59,9 +66,9 @@
 		<!-- Query Results -->
 			<table class="table table-striped">
 				<tr>
-	                <th>编号</th>
-	                <th>信息</th>
-	                <th>详细</th>
+	                <th>NO.</th>
+	                <th>Content</th>
+	                <th>Detail</th>
             	</tr>
             	<c:forEach var="erecord" items="${ehealthrecrods }" varStatus="status">
             		<tr>

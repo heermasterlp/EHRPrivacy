@@ -59,7 +59,7 @@ public class HomeController {
 	@RequestMapping(value="login", method = RequestMethod.POST)
 	public String handleLogin(HttpServletRequest request, Model model, HttpSession session){
 		
-		MongoCollection<Document> collection = ConnectionDB.getCollection("db", "ehealthdata");
+//		MongoCollection<Document> collection = ConnectionDB.getCollection("10.119.180.42", 27017, "EhrPrivacy", "DoctorIndex");
 		
 		// 1. Get doctor id and password from requests.
 		String username = request.getParameter("username");
@@ -68,21 +68,21 @@ public class HomeController {
 		session.setAttribute("userId", username);
 		
 		// 2. Search the node informations of doctor in the Doctor Index collections.
-//		if(HandleLoginOperation.verifyLegitimacyOfUser(username, password)){
-//			model.addAttribute("username", username);
-//			return "success";
-//		}else{
-//			return "home";
-//		}
+		if(HandleLoginOperation.verifyLegitimacyOfUser(username, password)){
+			model.addAttribute("username", username);
+			return "success";
+		}else{
+			return "home";
+		}
 		// 3. Verify the password based on node informations.
 		
 		// 4. If correct, doctor can login ,or not failed.
-		if(username.equals("admin") && password.equals("123")){
-			model.addAttribute("username", username);
-			return "success";
-		}else {
-			return "home";
-		}
+//		if(username.equals("admin") && password.equals("123")){
+//			model.addAttribute("username", username);
+//			return "success";
+//		}else {
+//			return "home";
+//		}
 	}
 	
 	/* Logout */

@@ -81,15 +81,18 @@ public class ConnectionDB {
 	        MongoCollection<Document> resultCollection = database.getCollection(collection);
 	        
 	        // Query the collection to get doctor information.
-	        FindIterable<Document> iterable = resultCollection.find(new Document("doctorid",doctorid));
+	        FindIterable<Document> iterable = resultCollection.find(new Document("doctor.Doctor_ID",doctorid));
 	        
 		    // Get the node information document.
 	        Document nodeinfo = iterable.first();
+	        System.out.println("[Node info]: " + nodeinfo);
 	        
-	        nodeinformation.put("host", nodeinfo.getString("host"));
-			nodeinformation.put("port", nodeinfo.getString("port"));
-			nodeinformation.put("database", nodeinfo.getString("document"));
-			nodeinformation.put("collection", nodeinfo.getString("collection"));
+	        Document doctorinfo = (Document) nodeinfo.get("doctor");
+	        
+	        nodeinformation.put("host", doctorinfo.getString("host"));
+			nodeinformation.put("port", doctorinfo.getString("port"));
+			nodeinformation.put("database", doctorinfo.getString("database"));
+			nodeinformation.put("collection", doctorinfo.getString("collection"));
 			nodeinformation.put("doctorid", doctorid);
 	        
 	        // Clear client.
@@ -126,11 +129,12 @@ public class ConnectionDB {
 	        MongoCollection<Document> resultCollection = database.getCollection(collection);
 	        
 	        // Query the collection to get doctor information.
-	        FindIterable<Document> iterable = resultCollection.find(new Document("doctorid", doctorid));
+	        FindIterable<Document> iterable = resultCollection.find(new Document("doctor.Doctor_ID", doctorid));
 	        
 	        // Get doctor info.
-	        Document doctorinfo = iterable.first();
-	        if( !password.equals(doctorinfo.getString("password"))){
+	        Document doctorinfo = (Document) iterable.first().get("doctor");
+	        
+	        if( !password.equals(doctorinfo.getString("Password"))){
 	        	
 	        	return false;
 	        }

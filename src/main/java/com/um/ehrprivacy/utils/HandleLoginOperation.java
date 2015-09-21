@@ -28,10 +28,10 @@ public class HandleLoginOperation {
 			return false;
 		}
 		// 1. Based on user name( doctor id), query node information of doctor from Doctor Index Table.
-		String doctorIndexHost = "";
+		String doctorIndexHost = "10.119.180.42";
 		int doctorIndexPort = 27017;
-		String doctorIndexDatabase = "";
-		String doctorIndexCollection = "";
+		String doctorIndexDatabase = "EhrPrivacy";
+		String doctorIndexCollection = "DoctorIndex";
 		// 2. Get node information.
 		Map<String, String> nodeinfo = ConnectionDB.getNodeInforOfDoctor(doctorIndexHost, doctorIndexPort, doctorIndexDatabase, doctorIndexCollection, doctorid);
 		
@@ -40,9 +40,11 @@ public class HandleLoginOperation {
 		}
 		
 		// 2. According to the node information, query that node to verify password.
+		System.out.println(nodeinfo);
 		
 		String doctorNodeHost = nodeinfo.get("host");
-		int doctorNodePort = Integer.valueOf(nodeinfo.get("port"));
+		int doctorNodePort = Integer.parseInt(nodeinfo.get("port"));
+		
 		String doctorNodeDatabase = nodeinfo.get("database");
 		String doctorNodeCollection = nodeinfo.get("collection");
 		

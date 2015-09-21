@@ -36,8 +36,10 @@ public class EHRPrivacyController {
 		// 2. Search patient node information in the Patient Index collections.
 		List<HashMap<String, String>> patientNodeInfos = HandlePatientRecordOperation.getPatientNodeInfoList(patientid);
 		
+		System.out.println(patientNodeInfos);
+		
 		// 3. Request the patient records to the nodes got from the Patient Index collections.
-		result = HandlePatientRecordOperation.getPatientRecords(null, patientid, userid);
+		result = HandlePatientRecordOperation.getPatientRecords(patientNodeInfos, patientid, userid);
 		
 		// 4. Do the whole query operations in all nodes.
 		// 5. Format the query results and return.

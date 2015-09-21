@@ -8,64 +8,76 @@ package com.um.ehrprivacy.model;
  */
 public class PatientInfo {
 	
-	private String ID;
-	
-	private String name;
-	
-	private String age;
-	
-	private String gender;
-	
-	private String address;
-	
-	private String phonenumber;
-
-	public String getID() {
-		return ID;
+	private String PID;
+	private String Name;
+	private String Surname;
+	private String Gender;
+	private String DoBDate;
+	private String Country;
+	private String StreetAddress;
+	private String City;
+	private String Postal;
+	private String hospitalId;
+	public String getPID() {
+		return PID;
 	}
-
-	public void setID(String iD) {
-		ID = iD;
+	public void setPID(String pID) {
+		PID = pID;
 	}
-
 	public String getName() {
-		return name;
+		return Name;
 	}
-
 	public void setName(String name) {
-		this.name = name;
+		Name = name;
 	}
-
-	public String getAge() {
-		return age;
+	public String getSurname() {
+		return Surname;
 	}
-
-	public void setAge(String age) {
-		this.age = age;
+	public void setSurname(String surname) {
+		Surname = surname;
 	}
-
 	public String getGender() {
-		return gender;
+		return Gender;
 	}
-
 	public void setGender(String gender) {
-		this.gender = gender;
+		Gender = gender;
 	}
-
-	public String getAddress() {
-		return address;
+	public String getDoBDate() {
+		return DoBDate;
 	}
-
-	public void setAddress(String address) {
-		this.address = address;
+	public void setDoBDate(String doBDate) {
+		DoBDate = doBDate;
 	}
-
-	public String getPhonenumber() {
-		return phonenumber;
+	public String getCountry() {
+		return Country;
 	}
-
-	public void setPhonenumber(String phonenumber) {
-		this.phonenumber = phonenumber;
+	public void setCountry(String country) {
+		Country = country;
 	}
+	public String getStreetAddress() {
+		return StreetAddress;
+	}
+	public void setStreetAddress(String streetAddress) {
+		StreetAddress = streetAddress;
+	}
+	public String getCity() {
+		return City;
+	}
+	public void setCity(String city) {
+		City = city;
+	}
+	public String getPostal() {
+		return Postal;
+	}
+	public void setPostal(String postal) {
+		Postal = postal;
+	}
+	public String getHospitalId() {
+		return hospitalId;
+	}
+	public void setHospitalId(String hospitalId) {
+		this.hospitalId = hospitalId;
+	}
+	
 	
 }

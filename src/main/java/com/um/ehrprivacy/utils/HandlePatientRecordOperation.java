@@ -11,6 +11,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.um.ehrprivacy.model.PatientInfo;
 import com.um.ehrprivacy.model.PatientRecord;
 
 /**
@@ -38,10 +39,10 @@ public class HandlePatientRecordOperation {
 		final List<HashMap<String, String>> nodeList = new ArrayList<HashMap<String,String>>();
 		
 		// The patient index table node information.
-		String patientIndexHost = "";
+		String patientIndexHost = "10.119.180.42";
 		int patientIndexPort = 27017;
-		String patientIndexDatabase = "";
-		String patientIndexCollection = "";
+		String patientIndexDatabase = "EhrPrivacy";
+		String patientIndexCollection = "PatientIndex";
 		
 		// Get the database connection.
 		MongoClient client = new MongoClient(patientIndexHost , patientIndexPort);	
@@ -53,7 +54,7 @@ public class HandlePatientRecordOperation {
 			MongoCollection<Document> resultCollection = database.getCollection(patientIndexCollection);
 				        
 			// Query the collection to get doctor information.
-			FindIterable<Document> iterable = resultCollection.find(new Document("patientid", patientid));
+			FindIterable<Document> iterable = resultCollection.find(new Document("patient.Patient_ID", patientid));
 			
 			iterable.forEach(new Block<Document>() {
 
@@ -61,11 +62,14 @@ public class HandlePatientRecordOperation {
 				public void apply(Document document) {
 					// TODO Auto-generated method stub
 					HashMap<String, String> patientNodeMap = new HashMap<String, String>();
-					patientNodeMap.put("patientid", document.getString("patientid"));
-					patientNodeMap.put("host", document.getString("host"));
-					patientNodeMap.put("port", document.getString("port"));
-					patientNodeMap.put("database", document.getString("document"));
-					patientNodeMap.put("collection", document.getString("collection"));
+					
+					Document doc = (Document) document.get("patient");
+					
+					patientNodeMap.put("patientid", doc.getString("Patient_ID"));
+					patientNodeMap.put("host", doc.getString("host"));
+					patientNodeMap.put("port", doc.getString("port"));
+					patientNodeMap.put("database", doc.getString("database"));
+					patientNodeMap.put("collection", doc.getString("collection")); // Patient informations
 					nodeList.add(patientNodeMap);
 				}
 			});
@@ -108,7 +112,7 @@ public class HandlePatientRecordOperation {
 			MongoCollection<Document> collection = db.getCollection(nodeCollection);
 			
 			// Find document------
-			FindIterable<Document> iterable = collection.find(new Document("patientid", patientid));
+			FindIterable<Document> iterable = collection.find(new Document("patientRecord.IDCardNO", patientid));
 			
 			iterable.forEach(new Block<Document>() {
 
@@ -130,6 +134,16 @@ public class HandlePatientRecordOperation {
 		// Return results
 		return patientRecords;
 	}
+	
+	/**
+	 * Get the patient informations.
+	 * 
+	 * @param patientid
+	 * @return
+	 */
+//	public static PatientInfo getPatientInfo(String patientid){
+//		
+//	}
 	
 	/**
 	 *  Convert methods ----:  Document - > PatientRecord
