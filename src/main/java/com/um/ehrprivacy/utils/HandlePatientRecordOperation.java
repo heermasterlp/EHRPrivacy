@@ -263,7 +263,6 @@ public class HandlePatientRecordOperation {
 		patientRecord.setLaboratoryReportRecordSet(laboratoryReportRecordSet);
 		
 		
-		
 		return patientRecord;
 	}
 	
