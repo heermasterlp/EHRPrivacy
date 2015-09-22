@@ -11,18 +11,16 @@ import com.google.gson.Gson;
 public class PatientRecord {
 	
 	private PatientInfo patientInfo;
-	
-	
 	private String PatientRecordID;
 	private String HospitalID;
 	private String IDCardNO;
 	private String Date;
-	
 	private HemodialysisChartRecordSet hemodialysisChartRecordSet;
 	private HemodialysisRecordSet hemodialysisRecordSet;
-	
 	private HBVaccineInjectionRecordSet hbVaccineInjectionRecordSet;
 	private LaboratoryReportRecordSet laboratoryReportRecordSet;
+	
+	
 	public String getHospitalID() {
 		return HospitalID;
 	}

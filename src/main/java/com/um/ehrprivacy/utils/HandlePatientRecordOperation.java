@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.print.Doc;
-
 import org.bson.Document;
 
 import com.mongodb.Block;
@@ -131,15 +129,12 @@ public class HandlePatientRecordOperation {
 			infoNodeMap.put("database", patientInfo.getString("database"));
 			infoNodeMap.put("collection", patientInfo.getString("collection"));
 			
-			
 		} finally {
 			// TODO: handle finally clause
 			client.close();
 		}
 		
-		
 		return infoNodeMap;
-		
 	}
 	
 	/**
@@ -153,12 +148,17 @@ public class HandlePatientRecordOperation {
 		if(patientNodeInfos == null || patientNodeInfos.size() == 0 || userid.equals("") || patientInfos == null || patientInfos.size() == 0) {
 			return null;
 		}
+		
 		final List<PatientRecord> patientRecords = new ArrayList<PatientRecord>();
 		
-		String infonodeHost = patientInfos.get("host");
-		int infonodePort = Integer.valueOf(patientInfos.get("port"));
-		String infonodeDB = patientInfos.get("database");
-		String infonodeCollection = patientInfos.get("collection");
+		/*
+		 *   Query patient's information
+		 */
+		
+		String infonodeHost = patientInfos.get("host"); // host
+		int infonodePort = Integer.valueOf(patientInfos.get("port")); // port
+		String infonodeDB = patientInfos.get("database"); // database
+		String infonodeCollection = patientInfos.get("collection"); // collection
 
 		MongoClient infoclient = new MongoClient(infonodeHost,infonodePort);
 		MongoDatabase infodb = infoclient.getDatabase(infonodeDB);
@@ -166,11 +166,8 @@ public class HandlePatientRecordOperation {
 		
 		FindIterable<Document> infoiterable = infocollection.find(new Document("patient.IDCardNO", patientid));
 		Document infoDocumet = infoiterable.first();
-		if(infoDocumet == null){
-			return patientRecords;
-		}
 		
-		final PatientInfo patientInfo = new PatientInfo();
+		final PatientInfo patientInfo = new PatientInfo(); // Patient information
 		
 		Document patientInfoDoc = (Document) infoDocumet.get("patient");
 		patientInfo.setIDCardNO(patientInfoDoc.getString("IDCardNO"));
@@ -185,11 +182,15 @@ public class HandlePatientRecordOperation {
 		
 		infoclient.close();
 		
+		/*
+		 *  Query patient's records
+		 */
 		// 1. Based on the nodes informations, query all nodes.
 		int nodeLength = patientNodeInfos.size();
 		
 		for(int i = 0; i < nodeLength; i++){
-			// Node basic info
+			
+			// Node route information
 			String nodeHost = patientNodeInfos.get(i).get("host");
 			int nodePort = Integer.valueOf(patientNodeInfos.get(i).get("port"));
 			String nodeDB = patientNodeInfos.get(i).get("database");
@@ -203,9 +204,11 @@ public class HandlePatientRecordOperation {
 			
 			// Find document------
 			Document conditions = new Document("patientRecord.IDCardNO", patientid); // patient id condition
+			// Date condition
 			if( !startDate.equals("") && !endDate.equals("")){
 				conditions.append("patientRecord.Date", new Document("$gt", startDate).append("$lte", endDate));
 			}
+			// Hospital id condition
 			if(!hospitalID.equals("")){
 				conditions.append("patientRecord.HospitalID", hospitalID.trim());
 			}
@@ -235,15 +238,6 @@ public class HandlePatientRecordOperation {
 		return patientRecords;
 	}
 	
-	/**
-	 * Get the patient informations.
-	 * 
-	 * @param patientid
-	 * @return
-	 */
-//	public static PatientInfo getPatientInfo(String patientid){
-//		
-//	}
 	
 	/**
 	 *  Convert methods ----:  Document - > PatientRecord
@@ -259,7 +253,7 @@ public class HandlePatientRecordOperation {
 		//Set attributes
 		
 		Document record = (Document) document.get("patientRecord");
-		if(record == null){
+		if( record == null ){
 			return patientRecord;
 		}
 		String PatientRecordID = record.getString("PatientRecordID");
@@ -342,8 +336,6 @@ public class HandlePatientRecordOperation {
 		hbVaccineInjectionRecordSet.setDateMonth10(hbvDocument.getString("DateMonth10"));
 		
 		patientRecord.setHbVaccineInjectionRecordSet(hbVaccineInjectionRecordSet);
-		
-		
 		
 		LaboratoryReportRecordSet laboratoryReportRecordSet = new LaboratoryReportRecordSet();
 		Document lbrDocument = (Document) record.get("LaboratoryReportRecordSet");

@@ -35,7 +35,7 @@
 	<div class="container">
 		<!-- Doctor Informations -->
 		<div class="doctorinfo">
-			<h2>welcome, ${ username }</h2>
+			<h2>welcome, ${username }</h2>
 			 <a href="logout">Logout</a>  
 		</div>
 		<!-- Detail Table -->

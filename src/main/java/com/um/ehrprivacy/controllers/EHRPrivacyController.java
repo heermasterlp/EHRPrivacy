@@ -1,16 +1,11 @@
 package com.um.ehrprivacy.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
 import com.um.ehrprivacy.model.PatientRecord;
 import com.um.ehrprivacy.utils.HandlePatientRecordOperation;
-import com.um.ehrprivacy.utils.ObjectToJson;
-
-import javax.jws.WebParam.Mode;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -33,30 +28,34 @@ public class EHRPrivacyController {
 		String startDate = request.getParameter("querystartdate");
 		
 		String endDate   = request.getParameter("queryenddate");
-		System.out.println(startDate + " --:-- " + endDate);
+		
 		String hospitalID = request.getParameter("hospitalid");
 		
 		// 2. Search patient node information in the Patient Index collections.
 		List<HashMap<String, String>> patientNodeInfos = HandlePatientRecordOperation.getPatientNodeRecordList(patientid);
-		Map<String, String> infoNodes = HandlePatientRecordOperation.getPatientNodeInfoMap(patientid);
 		
-		System.out.println(patientNodeInfos);
-		System.out.println(infoNodes);
+		Map<String, String> infoNodes = HandlePatientRecordOperation.getPatientNodeInfoMap(patientid); // Patient informations node 
 		
 		// 3. Request the patient records to the nodes got from the Patient Index collections.
 		List<PatientRecord> result = HandlePatientRecordOperation.getPatientRecords(patientNodeInfos, infoNodes ,patientid, userid, startDate, endDate, hospitalID);
 		
-		// 4. Do the whole query operations in all nodes.
-		// 5. Format the query results and return.
-		
+		// 4. Format the query results and return.
+		model.addAttribute("username", userid);
 		model.addAttribute("ehealthrecrods", result);
 		return "success";
 	}
 	
+	/**
+	 *  Get detail of records.
+	 * @param patientid
+	 * @param recordid
+	 * @param hospitalid
+	 * @param model
+	 * @param session
+	 * @return
+	 */
 	@RequestMapping(value="detail", method = RequestMethod.GET)
 	public String handleDetail(String patientid,String recordid,String hospitalid, Model model, HttpSession session){
-		
-		System.out.println("request record id" + recordid);
 		
 		String userid = (String) session.getAttribute("userId");
 		// 2. Search patient node information in the Patient Index collections.
@@ -69,45 +68,10 @@ public class EHRPrivacyController {
 		for(PatientRecord p : result){
 			if(recordid.trim().equals(p.getPatientRecordID().trim())){
 				model.addAttribute("record", p);
-				System.out.println(p.getPatientRecordID());
 			}
 		}
-		
+		model.addAttribute("username", userid);
 		return "detail";
-	}
-	
-	
-	/**
-	 *  Generate the patient record data
-	 * @return
-	 */
-	public List<PatientRecord> generateRecords(){
-		List<PatientRecord> list = new ArrayList<PatientRecord>();
-		
-		PatientRecord p = null;
-		for(int i = 0; i < 10; i++ ){
-			p = new PatientRecord();
-			
-		}
-		
-		return list;
-	}
-	
-	/**
-	 *  Convert the list to json.
-	 *  
-	 * @param list
-	 * @return
-	 */
-	public String converListToJSON(List<PatientRecord> list) {
-		if(list == null || list.size() == 0){
-			return "";
-		}
-		String jsonString = "";
-		
-		jsonString = new Gson().toJson(list);
-		
-		return jsonString;
 	}
 	
 }

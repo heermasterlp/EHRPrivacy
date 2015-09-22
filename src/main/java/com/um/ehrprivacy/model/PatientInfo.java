@@ -18,6 +18,7 @@ public class PatientInfo {
 	private String Nationality;
 	private String BloodType;
 	private String BloodTypeRH;
+	
 	public String getIDCardNO() {
 		return IDCardNO;
 	}

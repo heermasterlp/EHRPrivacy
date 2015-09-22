@@ -13,6 +13,8 @@ public class HBVaccineInjectionRecordSet {
 	private String DateMonth8;
 	private String DateMonth9;
 	private String DateMonth10;
+	
+	
 	public String getDateMonth0() {
 		return DateMonth0;
 	}

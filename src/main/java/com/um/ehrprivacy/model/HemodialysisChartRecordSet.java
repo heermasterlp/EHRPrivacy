@@ -12,6 +12,8 @@ public class HemodialysisChartRecordSet {
 	private String TMP;
 	private String Ven;
 	private String BloodFlow;
+	
+	
 	public String getTime() {
 		return Time;
 	}

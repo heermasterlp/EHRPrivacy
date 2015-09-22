@@ -37,6 +37,8 @@ public class HemodialysisRecordSet {
 	private String CloseNurse;
 	private String WithdrawalNurse;
 	private String Doctor;
+	
+	
 	public String getDate() {
 		return Date;
 	}
