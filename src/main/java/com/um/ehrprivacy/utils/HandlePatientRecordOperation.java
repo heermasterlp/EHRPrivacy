@@ -3,6 +3,7 @@ package com.um.ehrprivacy.utils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.print.Doc;
 
@@ -38,7 +39,7 @@ public class HandlePatientRecordOperation {
 	 * @param patientid
 	 * @return
 	 */
-	public static List<HashMap<String, String>> getPatientNodeInfoList(String patientid){
+	public static List<HashMap<String, String>> getPatientNodeRecordList(String patientid){
 		if(patientid.equals("")){
 			return null;
 		}
@@ -89,17 +90,100 @@ public class HandlePatientRecordOperation {
 	}
 	
 	/**
+	 *  Get the patient information node index information.
+	 *  
+	 * @param patientid
+	 * @return
+	 */
+	public static Map<String, String> getPatientNodeInfoMap(String patientid){
+		if(patientid.equals("")){
+			return null;
+		}
+		
+		Map<String, String> infoNodeMap = new HashMap<String, String>();
+		// The patient index table node information.
+		String patientIndexHost = "10.119.180.42";
+		int patientIndexPort = 27017;
+		String patientIndexDatabase = "EhrPrivacy";
+		String patientIndexCollection = "PatientInfoIndex";
+				
+		// Get the database connection.
+		MongoClient client = new MongoClient(patientIndexHost , patientIndexPort);
+		try {
+			MongoDatabase database = client.getDatabase(patientIndexDatabase);
+	        
+			MongoCollection<Document> resultCollection = database.getCollection(patientIndexCollection);
+				        
+			// Query the collection to get doctor information.
+			FindIterable<Document> iterable = resultCollection.find(new Document("patient.Patient_ID", patientid));
+			
+			Document result = iterable.first();
+			
+			if (result == null) {
+				return infoNodeMap;
+			}
+			
+			Document patientInfo = (Document) result.get("patient");
+			
+			infoNodeMap.put("patientid", patientInfo.getString("Patient_ID"));
+			infoNodeMap.put("host", patientInfo.getString("host"));
+			infoNodeMap.put("port", patientInfo.getString("port"));
+			infoNodeMap.put("database", patientInfo.getString("database"));
+			infoNodeMap.put("collection", patientInfo.getString("collection"));
+			
+			
+		} finally {
+			// TODO: handle finally clause
+			client.close();
+		}
+		
+		
+		return infoNodeMap;
+		
+	}
+	
+	/**
 	 *   Get all patient records 
 	 *   
 	 * @param patientNodeInfos
 	 * @param userid --- privacy ,control which informations can show to doctor.
 	 * @return
 	 */
-	public static List<PatientRecord> getPatientRecords(List<HashMap<String, String>> patientNodeInfos, String patientid , String userid){
-		if(patientNodeInfos == null || patientNodeInfos.size() == 0 || userid.equals("")){
+	public static List<PatientRecord> getPatientRecords(List<HashMap<String, String>> patientNodeInfos, Map<String, String> patientInfos, String patientid , String userid, String startDate, String endDate, String hospitalID){
+		if(patientNodeInfos == null || patientNodeInfos.size() == 0 || userid.equals("") || patientInfos == null || patientInfos.size() == 0) {
 			return null;
 		}
 		final List<PatientRecord> patientRecords = new ArrayList<PatientRecord>();
+		
+		String infonodeHost = patientInfos.get("host");
+		int infonodePort = Integer.valueOf(patientInfos.get("port"));
+		String infonodeDB = patientInfos.get("database");
+		String infonodeCollection = patientInfos.get("collection");
+
+		MongoClient infoclient = new MongoClient(infonodeHost,infonodePort);
+		MongoDatabase infodb = infoclient.getDatabase(infonodeDB);
+		MongoCollection<Document> infocollection = infodb.getCollection(infonodeCollection);
+		
+		FindIterable<Document> infoiterable = infocollection.find(new Document("patient.IDCardNO", patientid));
+		Document infoDocumet = infoiterable.first();
+		if(infoDocumet == null){
+			return patientRecords;
+		}
+		
+		final PatientInfo patientInfo = new PatientInfo();
+		
+		Document patientInfoDoc = (Document) infoDocumet.get("patient");
+		patientInfo.setIDCardNO(patientInfoDoc.getString("IDCardNO"));
+		patientInfo.setHospitalID(patientInfoDoc.getString("HospitalID"));
+		patientInfo.setPatientName(patientInfoDoc.getString("PatientName"));
+		patientInfo.setHomeAddress(patientInfoDoc.getString("HomeAddress"));
+		patientInfo.setSex(patientInfoDoc.getString("Sex"));
+		patientInfo.setDateOfBirth(patientInfoDoc.getString("DateOfBirth"));
+		patientInfo.setNationality(patientInfoDoc.getString("Nationality"));
+		patientInfo.setBloodType(patientInfoDoc.getString("BloodType"));
+		patientInfo.setBloodTypeRH(patientInfoDoc.getString("BloodTypeRH"));
+		
+		infoclient.close();
 		
 		// 1. Based on the nodes informations, query all nodes.
 		int nodeLength = patientNodeInfos.size();
@@ -118,7 +202,15 @@ public class HandlePatientRecordOperation {
 			MongoCollection<Document> collection = db.getCollection(nodeCollection);
 			
 			// Find document------
-			FindIterable<Document> iterable = collection.find(new Document("patientRecord.IDCardNO", patientid));
+			Document conditions = new Document("patientRecord.IDCardNO", patientid); // patient id condition
+			if( !startDate.equals("") && !endDate.equals("")){
+				conditions.append("patientRecord.Date", new Document("$gt", startDate).append("$lte", endDate));
+			}
+			if(!hospitalID.equals("")){
+				conditions.append("patientRecord.HospitalID", hospitalID.trim());
+			}
+			
+			FindIterable<Document> iterable = collection.find(conditions);
 			
 			iterable.forEach(new Block<Document>() {
 
@@ -129,8 +221,10 @@ public class HandlePatientRecordOperation {
 					
 					// Convert method!!!!-----   Document --> PatientRecord
 					PatientRecord patientRecord = convertDocumentToPatientRecord(document);
+					patientRecord.setPatientInfo(patientInfo);
 					
 					patientRecords.add(patientRecord);
+					
 				}
 			});
 			
@@ -168,11 +262,12 @@ public class HandlePatientRecordOperation {
 		if(record == null){
 			return patientRecord;
 		}
-		
+		String PatientRecordID = record.getString("PatientRecordID");
 		String HospitalID = record.getString("HospitalID");
 		String IDCardNO = record.getString("IDCardNO");
 		String Date = record.getString("Date");
 		
+		patientRecord.setPatientRecordID(PatientRecordID);
 		patientRecord.setHospitalID(HospitalID);
 		patientRecord.setIDCardNO(IDCardNO);
 		patientRecord.setDate(Date);

@@ -46,12 +46,13 @@
 					Patient ID. 
 					<input id="patientid" name="patientid" placeholder="Patient ID" required autofocus>
 					Date.
-					<input id="querydate" name="querystartdate" type="date" required autofocus/>
+					<input id="querydate" name="querystartdate" type="date" autofocus/>
 					-
-					<input id="querydate" name="queryenddate" type="date" required autofocus/>
+					<input id="querydate" name="queryenddate" type="date" autofocus/>
 					Hospital ID.
 					<!-- <input id="hospitalid" name="hospitalid" placeholder="Hospital ID" autofocus/> -->
 					<select class="select" name="hospitalid" >
+					  <option value="" selected="selected">All Hospitals</option>
 					  <option value="kw">HW Hospital</option>
 					  <option value="gov">GOW Hospital</option>
 					  <option value="uh">University Hospital</option>
@@ -73,8 +74,8 @@
             	<c:forEach var="erecord" items="${ehealthrecrods }" varStatus="status">
             		<tr>
 	            		<td>${status.index+1 }</td>
-	            		<td>挂号号： ${erecord.getIDCardNO() } : ${erecord.getHospitalID()}　: ${erecord.getDate()}</td>
-	            		<td><a href="">详细信息</a></td>
+	            		<td>Name： ${erecord.getPatientInfo().getPatientName() }  Hospital: ${erecord.getHospitalID()}　    ${erecord.getDate()}</td>
+	            		<td><a href="detail?patientid=${erecord.getIDCardNO() }&recordid=${erecord.getPatientRecordID() }&hospitalid=${erecord.getHospitalID()}">详细信息</a></td>
             	 	</tr>
             	</c:forEach>
 			</table>

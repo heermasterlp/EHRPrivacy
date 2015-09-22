@@ -8,76 +8,69 @@ package com.um.ehrprivacy.model;
  */
 public class PatientInfo {
 	
-	private String PID;
-	private String Name;
-	private String Surname;
-	private String Gender;
-	private String DoBDate;
-	private String Country;
-	private String StreetAddress;
-	private String City;
-	private String Postal;
-	private String hospitalId;
-	public String getPID() {
-		return PID;
-	}
-	public void setPID(String pID) {
-		PID = pID;
-	}
-	public String getName() {
-		return Name;
-	}
-	public void setName(String name) {
-		Name = name;
-	}
-	public String getSurname() {
-		return Surname;
-	}
-	public void setSurname(String surname) {
-		Surname = surname;
-	}
-	public String getGender() {
-		return Gender;
-	}
-	public void setGender(String gender) {
-		Gender = gender;
-	}
-	public String getDoBDate() {
-		return DoBDate;
-	}
-	public void setDoBDate(String doBDate) {
-		DoBDate = doBDate;
-	}
-	public String getCountry() {
-		return Country;
-	}
-	public void setCountry(String country) {
-		Country = country;
-	}
-	public String getStreetAddress() {
-		return StreetAddress;
-	}
-	public void setStreetAddress(String streetAddress) {
-		StreetAddress = streetAddress;
-	}
-	public String getCity() {
-		return City;
-	}
-	public void setCity(String city) {
-		City = city;
-	}
-	public String getPostal() {
-		return Postal;
-	}
-	public void setPostal(String postal) {
-		Postal = postal;
-	}
-	public String getHospitalId() {
-		return hospitalId;
-	}
-	public void setHospitalId(String hospitalId) {
-		this.hospitalId = hospitalId;
-	}
 	
+	private String IDCardNO;
+	private String HospitalID;
+	private String PatientName;
+	private String HomeAddress;
+	private String Sex;
+	private String DateOfBirth;
+	private String Nationality;
+	private String BloodType;
+	private String BloodTypeRH;
+	public String getIDCardNO() {
+		return IDCardNO;
+	}
+	public void setIDCardNO(String iDCardNO) {
+		IDCardNO = iDCardNO;
+	}
+	public String getHospitalID() {
+		return HospitalID;
+	}
+	public void setHospitalID(String hospitalID) {
+		HospitalID = hospitalID;
+	}
+	public String getPatientName() {
+		return PatientName;
+	}
+	public void setPatientName(String patientName) {
+		PatientName = patientName;
+	}
+	public String getHomeAddress() {
+		return HomeAddress;
+	}
+	public void setHomeAddress(String homeAddress) {
+		HomeAddress = homeAddress;
+	}
+	public String getSex() {
+		return Sex;
+	}
+	public void setSex(String sex) {
+		Sex = sex;
+	}
+	public String getDateOfBirth() {
+		return DateOfBirth;
+	}
+	public void setDateOfBirth(String dateOfBirth) {
+		DateOfBirth = dateOfBirth;
+	}
+	public String getNationality() {
+		return Nationality;
+	}
+	public void setNationality(String nationality) {
+		Nationality = nationality;
+	}
+	public String getBloodType() {
+		return BloodType;
+	}
+	public void setBloodType(String bloodType) {
+		BloodType = bloodType;
+	}
+	public String getBloodTypeRH() {
+		return BloodTypeRH;
+	}
+	public void setBloodTypeRH(String bloodTypeRH) {
+		BloodTypeRH = bloodTypeRH;
+	}
 	
 }

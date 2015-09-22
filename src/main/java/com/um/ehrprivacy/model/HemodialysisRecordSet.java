@@ -2,7 +2,7 @@ package com.um.ehrprivacy.model;
 
 public class HemodialysisRecordSet {
 	
-	private String 	Date;
+	private String Date;
 	private String Times;
 	private String Machine;
 	private String Dialyzer;

@@ -25,7 +25,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="F:/UM/EHRPrivacy/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="F:/UM/EHRPrivacy/mongo-java-driver-3.0.0-beta2.jar"/>
+	<classpathentry kind="lib" path="/Users/peterliu/Documents/workspace/EHRPrivacy/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/Users/peterliu/Documents/workspace/EHRPrivacy/mongo-java-driver-3.0.0-beta2.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

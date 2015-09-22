@@ -1,5 +1,7 @@
 package com.um.ehrprivacy.model;
 
+import com.google.gson.Gson;
+
 /**
  *  This is the structure of the public patient records.
  *  	
@@ -8,6 +10,10 @@ package com.um.ehrprivacy.model;
  */
 public class PatientRecord {
 	
+	private PatientInfo patientInfo;
+	
+	
+	private String PatientRecordID;
 	private String HospitalID;
 	private String IDCardNO;
 	private String Date;
@@ -58,6 +64,36 @@ public class PatientRecord {
 	}
 	public void setLaboratoryReportRecordSet(LaboratoryReportRecordSet laboratoryReportRecordSet) {
 		this.laboratoryReportRecordSet = laboratoryReportRecordSet;
+	}
+	public PatientInfo getPatientInfo() {
+		return patientInfo;
+	}
+	public void setPatientInfo(PatientInfo patientInfo) {
+		this.patientInfo = patientInfo;
+	}
+	public String getPatientRecordID() {
+		return PatientRecordID;
+	}
+	public void setPatientRecordID(String patientRecordID) {
+		PatientRecordID = patientRecordID;
+	}
+	
+	
+	/**
+	 *  object to json string
+	 */
+	public String toString(){
+		
+		// 1.Init json 
+		Gson gson = new Gson();
+		
+		String json = gson.toJson(this);
+		System.out.println(json);
+		return json;
+	}
+	
+	public PatientRecord toObject(String json){
+		return null;
 	}
 	
 }
