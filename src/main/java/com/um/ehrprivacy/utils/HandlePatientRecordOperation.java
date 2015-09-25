@@ -60,7 +60,7 @@ public class HandlePatientRecordOperation {
 				        
 			// Query the collection to get doctor information.
 			FindIterable<Document> iterable = resultCollection.find(new Document("patient.Patient_ID", patientid));
-			
+			System.out.println(patientid);
 			iterable.forEach(new Block<Document>() {
 
 				@Override
@@ -71,6 +71,8 @@ public class HandlePatientRecordOperation {
 					Document doc = (Document) document.get("patient");
 					
 					patientNodeMap.put("patientid", doc.getString("Patient_ID"));
+					patientNodeMap.put("recordid", doc.getString("Record_ID"));
+					System.out.println("--"+doc.getString("Record_ID") );
 					patientNodeMap.put("host", doc.getString("host"));
 					patientNodeMap.put("port", doc.getString("port"));
 					patientNodeMap.put("database", doc.getString("database"));
@@ -159,7 +161,7 @@ public class HandlePatientRecordOperation {
 		int infonodePort = Integer.valueOf(patientInfos.get("port")); // port
 		String infonodeDB = patientInfos.get("database"); // database
 		String infonodeCollection = patientInfos.get("collection"); // collection
-
+		
 		MongoClient infoclient = new MongoClient(infonodeHost,infonodePort);
 		MongoDatabase infodb = infoclient.getDatabase(infonodeDB);
 		MongoCollection<Document> infocollection = infodb.getCollection(infonodeCollection);
@@ -187,7 +189,6 @@ public class HandlePatientRecordOperation {
 		 */
 		// 1. Based on the nodes informations, query all nodes.
 		int nodeLength = patientNodeInfos.size();
-		
 		for(int i = 0; i < nodeLength; i++){
 			
 			// Node route information
@@ -195,6 +196,7 @@ public class HandlePatientRecordOperation {
 			int nodePort = Integer.valueOf(patientNodeInfos.get(i).get("port"));
 			String nodeDB = patientNodeInfos.get(i).get("database");
 			String nodeCollection = patientNodeInfos.get(i).get("collection");
+			String nodeRecordId = patientNodeInfos.get(i).get("recordid");
 			
 			MongoClient client = new MongoClient(nodeHost, nodePort);
 			
@@ -203,7 +205,7 @@ public class HandlePatientRecordOperation {
 			MongoCollection<Document> collection = db.getCollection(nodeCollection);
 			
 			// Find document------
-			Document conditions = new Document("patientRecord.IDCardNO", patientid); // patient id condition
+			Document conditions = new Document("patientRecord.IDCardNO", patientid).append("patientRecord.PatientRecordID", nodeRecordId); // patient id condition
 			// Date condition
 			if( !startDate.equals("") && !endDate.equals("")){
 				conditions.append("patientRecord.Date", new Document("$gt", startDate).append("$lte", endDate));
@@ -225,7 +227,6 @@ public class HandlePatientRecordOperation {
 					// Convert method!!!!-----   Document --> PatientRecord
 					PatientRecord patientRecord = convertDocumentToPatientRecord(document);
 					patientRecord.setPatientInfo(patientInfo);
-					
 					patientRecords.add(patientRecord);
 					
 				}
