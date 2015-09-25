@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.JWTVerifyException;
 import com.auth0.jwt.internal.org.apache.commons.codec.binary.Base64;
+import com.um.ehrprivacy.dao.ConnectionDB;
 import com.um.ehrprivacy.utils.HandleLoginOperation;
 
 /**
@@ -52,6 +53,42 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value = "/tracker", method = RequestMethod.GET)
+	public String tracker(Locale locale, Model model) {
+		logger.info("Welcome home! The client locale is {}.", locale);
+		
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		
+		String formattedDate = dateFormat.format(date);
+		
+		model.addAttribute("serverTime", formattedDate );
+		
+		return "tracker";
+	}
+	
+	@RequestMapping(value = "/trackerlogin", method = RequestMethod.POST)
+	public String trackerLogin(HttpServletRequest request, Model model, HttpSession session){
+		
+		String trackerid = request.getParameter("trackerid");
+		String password = request.getParameter("password");
+		System.out.println(trackerid + ":" + password);
+		// verify the username and password of tracker.
+		if(HandleLoginOperation.verifyLegitimacyOfTracker(trackerid, password)){
+			
+			String userip = request.getParameter("userip");
+			session.setAttribute("trackername", trackerid);
+			session.setAttribute("trackerip", userip);
+			
+			model.addAttribute("trackerid",trackerid);
+			
+			return "trackerlog";
+		}else {
+			return "tracker";
+		}
+	}
+	
+	
 	/**
 	 *  Handle the login operation.
 	 *  	1. Doctor login.
@@ -71,17 +108,23 @@ public class HomeController {
 	public String handleLogin(HttpServletRequest request, Model model, HttpSession session) throws InvalidKeyException, NoSuchAlgorithmException, IOException, JWTVerifyException{
 		
 		// 1. Get doctor id and password from requests.
-		String username = request.getParameter("username");
+//		String username = request.getParameter("username");
 		String tokens = request.getParameter("tokens");
+//		String clientip = request.getParameter("clientip");
+		
 		System.out.println("[tokens]:" + tokens);
 		// 2. Generate tokens based on the secret code.
 		String CLIENT_SECRET = "PGD-EHR";
 		try {
             byte[] secret = Base64.decodeBase64(CLIENT_SECRET);
             Map<String,Object> decodedPayload = new JWTVerifier(CLIENT_SECRET,"doctor").verify(tokens.trim());
+            
+            String username = (String) decodedPayload.get("username");
+            String clientip = (String) decodedPayload.get("clientip");
 
             // Get custom fields from decoded Payload
             session.setAttribute("userId", username);
+            session.setAttribute("clientip", clientip);
             return "success";
             
         } catch (SignatureException signatureException) {
@@ -118,9 +161,11 @@ public class HomeController {
 		String CLIENT_SECRET = "PGD-EHR";
 		try {
             Map<String,Object> decodedPayload = new JWTVerifier(CLIENT_SECRET,"doctor").verify(tokens.trim());
+            
 
             // Get custom fields from decoded Payload
             session.setAttribute("userId", decodedPayload.get("username"));
+            session.setAttribute("clientip", decodedPayload.get("clientip"));
             return new ModelAndView("success");
             
         } catch (SignatureException signatureException) {
@@ -136,5 +181,11 @@ public class HomeController {
 	@RequestMapping(value="logout", method = RequestMethod.GET)
 	public String handleLogout(Model model) {
 		return "home";
+	}
+	
+	/* Logout */
+	@RequestMapping(value="trackerlogout", method = RequestMethod.GET)
+	public String handletrackerLogout(Model model) {
+		return "tracker";
 	}
 }

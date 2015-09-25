@@ -115,7 +115,7 @@ public class ConnectionDB {
 	 * @param password
 	 * @return
 	 */
-	public static boolean verifyDoctorLoginInfo(String host, int port, String db, String collection, String doctorid, String password){
+	public static boolean verifyDoctorLoginInfo(String host, int port, String db, String collection, String trackerid, String password){
 		if(password.equals("")){
 			return false;
 		}
@@ -129,12 +129,13 @@ public class ConnectionDB {
 	        MongoCollection<Document> resultCollection = database.getCollection(collection);
 	        
 	        // Query the collection to get doctor information.
-	        FindIterable<Document> iterable = resultCollection.find(new Document("doctor.Doctor_ID", doctorid));
+	        FindIterable<Document> iterable = resultCollection.find(new Document("username", trackerid));
 	        
 	        // Get doctor info.
-	        Document doctorinfo = (Document) iterable.first().get("doctor");
+	        Document trackerinfo = (Document) iterable.first();
+	        System.out.println(trackerinfo);
 	        
-	        if( !password.equals(doctorinfo.getString("Password"))){
+	        if( !password.equals(trackerinfo.getString("password"))){
 	        	
 	        	return false;
 	        }

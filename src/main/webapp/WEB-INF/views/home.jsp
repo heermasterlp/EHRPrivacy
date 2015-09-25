@@ -17,9 +17,11 @@
 			
 			$.get(url,function(data){
 				$.post('login1',
-						{tokens: data.token},
+						{
+							tokens: data.token
+						},
 						function(response){
-							alert(response);
+							
 							$('#subViewDiv').html(response);
 						});
 			});
